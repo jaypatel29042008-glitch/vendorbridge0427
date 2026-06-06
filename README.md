@@ -1,18 +1,73 @@
-# React + Vite
+# VendorBridge — Smart Procurement ERP
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack, multi-tenant procurement management platform built with React + Vite + Zustand + TailwindCSS v4.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Multi-tenant architecture** with role-based access (Procurement Officer, Manager, Vendor, Admin)
+- **Vendor Registry & Compliance Vetting** — register, verify, suspend vendors
+- **RFQ Lifecycle Management** — create, publish, invite vendors
+- **Quotation Comparison Engine** — side-by-side comparison with radar chart analysis
+- **Gated Approval Workflow** — multi-tier PO approval pipeline
+- **PO & Invoice Hub** — purchase orders, GRN tracking, invoice compilation
+- **AI-Powered 3-Way Invoice Matching** — OCR simulation with variance detection
+- **Compliance-as-Code Engine** — English-language rule compiler
+- **Activity Logs & Audit Trail** — full audit timeline with filtering
+- **Reports & Analytics** — spend trends, vendor performance, procurement pipeline
 
-## React Compiler
+## 🛠 Tech Stack
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- **React 19** + **Vite 8**
+- **TailwindCSS v4** (with @tailwindcss/vite)
+- **Zustand 5** (state management)
+- **Recharts 3** (data visualizations)
+- **React Router DOM 7**
+- **Lucide React** (icons)
 
-Note: This will impact Vite dev & build performances.
+## 📦 Getting Started
 
-## Expanding the ESLint configuration
+```bash
+npm install
+npm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🔐 Demo Accounts
+
+| Role | Email | Password |
+|------|-------|----------|
+| Procurement Officer | officer@aeroparts.com | password |
+| Manager / Approver | manager@aeroparts.com | password |
+| Vendor | vendor@titanium.com | password |
+| Admin | admin@aeroparts.com | password |
+
+## 🌐 Live Demo
+
+[https://vendorbridge0427.lovable.app/](https://vendorbridge0427.lovable.app/)
+
+## 📁 Project Structure
+
+```
+src/
+├── components/
+│   └── Layout.jsx          # Sidebar navigation & header
+├── pages/
+│   ├── Login.jsx
+│   ├── Dashboard.jsx
+│   ├── VendorRegistry.jsx
+│   ├── RfqCreate.jsx
+│   ├── QuoteSubmit.jsx
+│   ├── QuoteCompare.jsx
+│   ├── ApprovalWorkflow.jsx
+│   ├── InvoiceHub.jsx
+│   ├── ActivityLogs.jsx
+│   ├── Reports.jsx
+│   ├── AiMatch.jsx
+│   └── ComplianceEngine.jsx
+├── store.js                 # Zustand global store + mock data
+├── App.jsx                  # Router setup
+├── main.jsx
+└── index.css                # TailwindCSS + design tokens
+```
+
+---
+Built for the CodeAlpha AI Internship — Jay Patel
