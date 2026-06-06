@@ -1,9 +1,5 @@
 import { create } from 'zustand';
 
-// ============================================================================
-// MOCK DATA — Multi-tenant procurement ERP seed data
-// ============================================================================
-
 const TENANTS = [
   { id: 1, name: 'AeroParts Global Inc.', subdomain: 'aeroparts', active: true },
   { id: 2, name: 'Apex Logistics & Procurement', subdomain: 'apexprocure', active: true },
@@ -101,12 +97,7 @@ const NOTIFICATIONS = [
   { id: 3, userId: 2, title: 'Approval Required', message: 'New PO pending your approval: PO-2026-0001', read: false, createdAt: '2026-06-04T10:30:00Z', type: 'approval' },
 ];
 
-// ============================================================================
-// ZUSTAND STORE
-// ============================================================================
-
 export const useStore = create((set, get) => ({
-  // ---- Auth ----
   isAuthenticated: false,
   currentUser: null,
   tenants: TENANTS,
@@ -115,10 +106,7 @@ export const useStore = create((set, get) => ({
 
   login: (email, password) => {
     const user = USERS.find(u => u.email === email);
-    if (user) {
-      set({ isAuthenticated: true, currentUser: user });
-      return true;
-    }
+    if (user) { set({ isAuthenticated: true, currentUser: user }); return true; }
     return false;
   },
   logout: () => set({ isAuthenticated: false, currentUser: null }),
@@ -131,7 +119,6 @@ export const useStore = create((set, get) => ({
     if (tenant) set({ activeTenant: tenant });
   },
 
-  // ---- Vendors ----
   vendors: VENDORS,
   addVendor: (vendor) => set(s => ({
     vendors: [...s.vendors, { ...vendor, id: s.vendors.length + 1, tenantId: s.activeTenant.id, status: 'PENDING', rating: 0 }],
@@ -142,7 +129,6 @@ export const useStore = create((set, get) => ({
     auditLogs: [{ id: s.auditLogs.length + 1, tenantId: s.activeTenant.id, userId: s.currentUser?.id, action: status === 'ACTIVE' ? 'VENDOR_VERIFIED' : 'VENDOR_SUSPENDED', entity: 'Vendor', entityId: vendorId, details: `Vendor status changed to ${status}`, ip: '127.0.0.1', createdAt: new Date().toISOString() }, ...s.auditLogs],
   })),
 
-  // ---- RFQs ----
   rfqs: RFQS,
   addRfq: (rfq) => set(s => {
     const newRfq = { ...rfq, id: s.rfqs.length + 1, tenantId: s.activeTenant.id, createdBy: s.currentUser?.id, createdAt: new Date().toISOString(), status: 'PUBLISHED' };
@@ -152,7 +138,6 @@ export const useStore = create((set, get) => ({
     };
   }),
 
-  // ---- Quotations ----
   quotations: QUOTATIONS,
   addQuotation: (quote) => set(s => {
     const rfq = s.rfqs.find(r => r.id === quote.rfqId);
@@ -165,15 +150,13 @@ export const useStore = create((set, get) => ({
     };
   }),
 
-  // ---- Purchase Orders ----
   purchaseOrders: PURCHASE_ORDERS,
   createPO: (quotationId) => set(s => {
     const q = s.quotations.find(qt => qt.id === quotationId);
     if (!q) return s;
     const autoApprove = q.total <= 5000;
     const po = {
-      id: s.purchaseOrders.length + 1,
-      tenantId: s.activeTenant.id,
+      id: s.purchaseOrders.length + 1, tenantId: s.activeTenant.id,
       poNumber: `PO-2026-${String(s.purchaseOrders.length + 1).padStart(4, '0')}`,
       rfqId: q.rfqId, vendorId: q.vendorId, quotationId: q.id,
       total: q.total, status: autoApprove ? 'APPROVED' : 'PENDING_APPROVAL',
@@ -193,13 +176,11 @@ export const useStore = create((set, get) => ({
     auditLogs: [{ id: s.auditLogs.length + 1, tenantId: s.activeTenant.id, userId: s.currentUser?.id, action: 'PO_REJECTED', entity: 'PurchaseOrder', entityId: poId, details: `Rejected: ${remarks}`, ip: '127.0.0.1', createdAt: new Date().toISOString() }, ...s.auditLogs],
   })),
 
-  // ---- GRNs ----
   grns: GRNS,
   addGrn: (grn) => set(s => ({
     grns: [{ ...grn, id: s.grns.length + 1, tenantId: s.activeTenant.id, status: 'COMPLETED', receivedDate: new Date().toISOString() }, ...s.grns],
   })),
 
-  // ---- Invoices ----
   invoices: INVOICES,
   addInvoice: (inv) => set(s => ({
     invoices: [{ ...inv, id: s.invoices.length + 1, tenantId: s.activeTenant.id, createdAt: new Date().toISOString() }, ...s.invoices],
@@ -208,13 +189,9 @@ export const useStore = create((set, get) => ({
     invoices: s.invoices.map(i => i.id === invId ? { ...i, status } : i),
   })),
 
-  // ---- Approval Rules ----
   approvalRules: APPROVAL_RULES,
-
-  // ---- Audit Logs ----
   auditLogs: AUDIT_LOGS,
 
-  // ---- Chat ----
   chatMessages: CHAT_MESSAGES,
   sendMessage: (rfqId, message) => set(s => ({
     chatMessages: [...s.chatMessages, {
@@ -224,11 +201,9 @@ export const useStore = create((set, get) => ({
     }],
   })),
 
-  // ---- Compliance ----
   complianceRules: COMPLIANCE_RULES,
   setComplianceRules: (rules) => set({ complianceRules: rules }),
 
-  // ---- Notifications ----
   notifications: NOTIFICATIONS,
   markNotificationRead: (id) => set(s => ({
     notifications: s.notifications.map(n => n.id === id ? { ...n, read: true } : n),
@@ -237,7 +212,6 @@ export const useStore = create((set, get) => ({
     notifications: [{ ...notif, id: s.notifications.length + 1, read: false, createdAt: new Date().toISOString() }, ...s.notifications],
   })),
 
-  // ---- Toast ----
   toast: null,
   showToast: (text, success = true) => {
     set({ toast: { text, success } });
